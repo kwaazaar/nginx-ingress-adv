@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ssldemo-ingress
+  namespace: development
+  annotations:
+    kubernetes.io/ingress.class: "public" # Ingress controller for service external traffic
+
+    # IP whitelisting
+    nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 13.95.231.10 # 1.1.0.0/32
+
+    # Let op: ssl-passthrough werkt op TCP-niveau, waardoor veel andere annotations niet meer door nginx afgehandeld kunnen worden!
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    
+    # Geen entries in access-log (goed voor privacy, maar lastig troubleshooten)
+    # nginx.ingress.kubernetes.io/enable-access-log: "false"
+    
+    # WAF!
+    nginx.ingress.kubernetes.io/lua-resty-waf: "active" # inactive, simulate
+    # nginx.ingress.kubernetes.io/lua-resty-waf-debug: "true" # For debugging only
+    nginx.ingress.kubernetes.io/lua-resty-waf-extra-rules: '[=[ { "access": [ { "actions": { "disrupt" : "DENY" }, "id": 10001, "msg": "my custom rule", "operator": "STR_CONTAINS", "pattern": "foo", "vars": [ { "parse": [ "values", 1 ], "type": "REQUEST_ARGS" } ] } ], "body_filter": [], "header_filter":[] } ]=]' # Voorbeeld rule: geen param-value 'foo' toegestaat (bv ?a=foo)
+    nginx.ingress.kubernetes.io/lua-resty-waf-allow-unknown-content-types: "true" # anders alleen html/json
+
+    # Client SSL cert
+    # Enable client certificate authentication
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    # Create the secret containing the trusted ca certificates
+    nginx.ingress.kubernetes.io/auth-tls-secret: "development/ca-secret"
+    # Specify the verification depth in the client certificates chain
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    # Specify an error page to be redirected to verification errors (lastiger troubleshooten)
+    # nginx.ingress.kubernetes.io/auth-tls-error-page: "http://www.mysite.com/error-cert.html"
+    # Specify if certificates are passed to upstream server (voor identificatie van ingelogde user)
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+
+    # Querystring rewrite naar /
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - ssldemo.dev.aahg.ot
+    secretName: dev-ssl
+  rules:
+  - host: ssldemo.dev.aahg.ot
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ssldemo-svc
+          servicePort: http-ssldemo
