@@ -7,7 +7,11 @@ metadata:
     kubernetes.io/ingress.class: "public" # Ingress controller for service external traffic
 
     # IP whitelisting
-    nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 13.95.231.10 # 1.1.0.0/32
+    nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 87.213.32.38 # 1.1.0.0/32
+
+    # Rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: "1"
+    nginx.ingress.kubernetes.io/limit-rpm: "10"
 
     # Let op: ssl-passthrough werkt op TCP-niveau, waardoor veel andere annotations niet meer door nginx afgehandeld kunnen worden!
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
