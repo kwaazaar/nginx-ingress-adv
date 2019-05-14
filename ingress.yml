@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: "public" # Ingress controller for service external traffic
 
     # IP whitelisting
-    nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 87.213.32.38 # 1.1.0.0/32
+    nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 87.213.32.38, 10.234.0.0/16
 
     # Rate limiting
     nginx.ingress.kubernetes.io/limit-rps: "1"
