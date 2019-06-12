@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ssldemo-ingress
+  name: ssldemo-health-ingress
   namespace: development
   annotations:
     #kubernetes.io/ingress.class: "public" # Ingress controller for service external traffic
@@ -27,7 +27,7 @@ metadata:
 
     # Client SSL cert
     # Enable client certificate authentication
-    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "off"
     # Create the secret containing the trusted ca certificates
     nginx.ingress.kubernetes.io/auth-tls-secret: "development/ca-secret"
     # Specify the verification depth in the client certificates chain
@@ -37,8 +37,8 @@ metadata:
     # Specify if certificates are passed to upstream server (voor identificatie van ingelogde user)
     nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
 
-    # Querystring rewrite naar /
-    ingress.kubernetes.io/rewrite-target: /
+    # Querystring rewrite naar /health
+    nginx.ingress.kubernetes.io/rewrite-target: "/health"
 spec:
   tls:
   - hosts:
@@ -48,7 +48,7 @@ spec:
   - host: ssldemo.dev.aahg.ot
     http:
       paths:
-      - path: /
+      - path: "/blaat"
         backend:
           serviceName: ssldemo-svc
           servicePort: http-ssldemo

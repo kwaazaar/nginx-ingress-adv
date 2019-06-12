@@ -20,7 +20,7 @@ spec:
     spec:
       serviceAccountName: ssldemo-sa
       containers:
-      - image: k8s.gcr.io/echoserver:1.4
+      - image: k8s.gcr.io/echoserver:1.10
       # - image: r.j3ss.co/party-clippy
         name: ssldemo
         resources:
