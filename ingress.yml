@@ -37,6 +37,7 @@ metadata:
     # Specify if certificates are passed to upstream server (voor identificatie van ingelogde user)
     nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
 
+    # Configuration snippet to add response headers for this specific Ingress.
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Request-Id: $req_id";
       more_set_headers "X-Frame-Options: SAMEORIGIN";
