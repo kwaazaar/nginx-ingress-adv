@@ -37,6 +37,15 @@ metadata:
     # Specify if certificates are passed to upstream server (voor identificatie van ingelogde user)
     nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
 
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Request-Id: $req_id";
+      more_set_headers "X-Frame-Options: SAMEORIGIN";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval' www.florius.nl *.aahg.ot *.aahg.nl tdn.r42tag.com t.svtrd.com ssl.google-analytics.com fonts.googleapis.com fonts.gstatic.com; img-src data: https:; media-src https: data:; connect-src https://www.surve.nl/ https://insights.hotjar.com/; block-all-mixed-content";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "Feature-Policy: geolocation 'self'; midi 'none'; sync-xhr 'self'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'";
+
     # Querystring rewrite naar /
     ingress.kubernetes.io/rewrite-target: /
 spec:
