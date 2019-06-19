@@ -21,8 +21,14 @@ spec:
       serviceAccountName: ssldemo-sa
       containers:
       - image: k8s.gcr.io/echoserver:1.10
+      # - image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
       # - image: r.j3ss.co/party-clippy
         name: ssldemo
+        securityContext:
+          #runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          privileged: false
+          #readOnlyRootFilesystem: true
         resources:
           requests:
             cpu: "20m"
@@ -30,6 +36,18 @@ spec:
           limits:
             cpu: "100m"
             memory: "80M"
+        livenessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+          timeoutSeconds: 5
+          initialDelaySeconds: 60
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+          timeoutSeconds: 5
+          initialDelaySeconds: 60
         ports:
         - containerPort:  8080
           name:  http-main
