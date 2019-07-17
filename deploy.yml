@@ -25,6 +25,9 @@ spec:
       # - image: r.j3ss.co/party-clippy
         name: ssldemo
         securityContext:
+          #runAsUser: 65534 # 1000=root, 65534=nobody
+          #runAsGroup: 3000
+          #fsGroup: 2000        
           #runAsNonRoot: true
           allowPrivilegeEscalation: false
           privileged: false
