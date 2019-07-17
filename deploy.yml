@@ -18,7 +18,7 @@ spec:
         app:  ssldemo
         version: "0.1"
     spec:
-      serviceAccountName: ssldemo-sa
+      #serviceAccountName: ssldemo-sa
       containers:
       - image: k8s.gcr.io/echoserver:1.10
       # - image: mcr.microsoft.com/dotnet/core/samples:aspnetapp

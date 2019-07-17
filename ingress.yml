@@ -5,9 +5,10 @@ metadata:
   namespace: development
   annotations:
     #kubernetes.io/ingress.class: "public" # Ingress controller for service external traffic
-
+    #kubernetes.io/ingress.class: azure/application-gateway
+    
     # IP whitelisting
-    nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 87.213.32.38, 10.234.0.0/16,192.168.0.0/16
+    #nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 87.213.32.38, 10.234.0.0/16,192.168.0.0/16
 
     # Rate limiting
     nginx.ingress.kubernetes.io/limit-rps: "1"
@@ -27,7 +28,7 @@ metadata:
 
     # Client SSL cert
     # Enable client certificate authentication
-    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "off"
     # Create the secret containing the trusted ca certificates
     nginx.ingress.kubernetes.io/auth-tls-secret: "development/ca-secret"
     # Specify the verification depth in the client certificates chain
@@ -43,7 +44,7 @@ metadata:
       more_set_headers "X-Frame-Options: SAMEORIGIN";
       more_set_headers "X-Content-Type-Options: nosniff";
       more_set_headers "X-XSS-Protection: 1; mode=block";
-      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval' www.florius.nl *.aahg.ot *.aahg.nl tdn.r42tag.com t.svtrd.com ssl.google-analytics.com fonts.googleapis.com fonts.gstatic.com; img-src data: https:; media-src https: data:; connect-src https://www.surve.nl/ https://insights.hotjar.com/; block-all-mixed-content";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src fonts.gstatic.com";
       more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
       more_set_headers "Feature-Policy: geolocation 'self'; midi 'none'; sync-xhr 'self'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'";
 
