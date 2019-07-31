@@ -20,11 +20,24 @@ metadata:
     # Geen entries in access-log (goed voor privacy, maar lastig troubleshooten)
     # nginx.ingress.kubernetes.io/enable-access-log: "false"
     
-    # WAF!
+    # Lua Restu WAF
     #nginx.ingress.kubernetes.io/lua-resty-waf: "active" # inactive, simulate
-    # nginx.ingress.kubernetes.io/lua-resty-waf-debug: "true" # For debugging only
+    #nginx.ingress.kubernetes.io/lua-resty-waf-debug: "true" # For debugging only
     #nginx.ingress.kubernetes.io/lua-resty-waf-extra-rules: '[=[ { "access": [ { "actions": { "disrupt" : "DENY" }, "id": 10001, "msg": "my custom rule", "operator": "STR_CONTAINS", "pattern": "foo", "vars": [ { "parse": [ "values", 1 ], "type": "REQUEST_ARGS" } ] } ], "body_filter": [], "header_filter":[] } ]=]' # Voorbeeld rule: geen param-value 'foo' toegestaat (bv ?a=foo)
     #nginx.ingress.kubernetes.io/lua-resty-waf-allow-unknown-content-types: "true" # anders alleen html/json
+
+    # ModSecurity WAF
+    # nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    # nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRule REQUEST_HEADERS_NAMES "^x-waf-test" "log,deny,id:48,status:403,t:lowercase,msg:WAFWAFWAF"
+      SecRequestBodyAccess On
+      SecDebugLog /tmp/modsec_debug.log
+      SecDebugLogLevel 9
+      SecRuleEngine On
+
+    #SecDefaultAction "phase:1,log,auditlog,deny,status:403"
+    #SecDefaultAction "phase:2,log,auditlog,deny,status:403"
 
     # Client SSL cert
     # Enable client certificate authentication
@@ -41,6 +54,7 @@ metadata:
     # Configuration snippet to add response headers for this specific Ingress.
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Request-Id: $req_id";
+      more_set_headers "Update: 1";
       more_set_headers "X-Frame-Options: SAMEORIGIN";
       more_set_headers "X-Content-Type-Options: nosniff";
       more_set_headers "X-XSS-Protection: 1; mode=block";
