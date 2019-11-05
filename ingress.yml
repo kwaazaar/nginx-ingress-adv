@@ -4,15 +4,15 @@ metadata:
   name: ssldemo-ingress
   namespace: development
   annotations:
-    #kubernetes.io/ingress.class: "public" # Ingress controller for service external traffic
+    #kubernetes.io/ingress.class: "intern-dck"
     #kubernetes.io/ingress.class: azure/application-gateway
     
     # IP whitelisting
     #nginx.ingress.kubernetes.io/whitelist-source-range: 13.95.231.11, 87.213.32.38, 10.234.0.0/16,192.168.0.0/16
 
     # Rate limiting
-    nginx.ingress.kubernetes.io/limit-rps: "1"
-    nginx.ingress.kubernetes.io/limit-rpm: "10"
+    #nginx.ingress.kubernetes.io/limit-rps: "1"
+    #nginx.ingress.kubernetes.io/limit-rpm: "10"
 
     # Let op: ssl-passthrough werkt op TCP-niveau, waardoor veel andere annotations niet meer door nginx afgehandeld kunnen worden!
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
@@ -33,7 +33,8 @@ metadata:
       SecRule REQUEST_HEADERS_NAMES "^x-waf-test" "log,deny,id:48,status:403,t:lowercase,msg:WAFWAFWAF"
       SecRequestBodyAccess On
       SecDebugLog /tmp/modsec_debug.log
-      SecDebugLogLevel 9
+      SecDebugLogLevel 1
+      SecAuditLogType Concurrent
       SecRuleEngine On
 
     #SecDefaultAction "phase:1,log,auditlog,deny,status:403"
