@@ -4,7 +4,7 @@ metadata:
   name:  ssldemo-dep
   namespace: development
   labels:
-    name:  ssldemo
+    name: ssldemo
 spec:
   replicas: 2
   strategy:
