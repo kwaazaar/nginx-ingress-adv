@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ssldemo-ingress
@@ -55,7 +55,7 @@ metadata:
     # Configuration snippet to add response headers for this specific Ingress.
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Request-Id: $req_id";
-      more_set_headers "Update: 1";
+      more_set_headers "Update: 2";
       more_set_headers "X-Frame-Options: SAMEORIGIN";
       more_set_headers "X-Content-Type-Options: nosniff";
       more_set_headers "X-XSS-Protection: 1; mode=block";
@@ -64,7 +64,7 @@ metadata:
       more_set_headers "Feature-Policy: geolocation 'self'; midi 'none'; sync-xhr 'self'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'";
 
     # Querystring rewrite naar /
-    ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   tls:
   - hosts:
