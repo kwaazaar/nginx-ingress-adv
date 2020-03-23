@@ -2,8 +2,8 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ssldemo-ingress
-  namespace: development
   annotations:
+    kubernetes.io/ingress.class: public
     #kubernetes.io/ingress.class: "intern-dck"
     #kubernetes.io/ingress.class: azure/application-gateway
     
@@ -35,27 +35,27 @@ metadata:
       SecDebugLog /tmp/modsec_debug.log
       SecDebugLogLevel 1
       SecAuditLogType Concurrent
-      SecRuleEngine On
+      SecRuleEngine Off
 
     #SecDefaultAction "phase:1,log,auditlog,deny,status:403"
     #SecDefaultAction "phase:2,log,auditlog,deny,status:403"
 
     # Client SSL cert
     # Enable client certificate authentication
-    nginx.ingress.kubernetes.io/auth-tls-verify-client: "off"
+    # nginx.ingress.kubernetes.io/auth-tls-verify-client: "off"
     # Create the secret containing the trusted ca certificates
-    nginx.ingress.kubernetes.io/auth-tls-secret: "development/ca-secret"
+    # nginx.ingress.kubernetes.io/auth-tls-secret: "development/ca-secret"
     # Specify the verification depth in the client certificates chain
-    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    # nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
     # Specify an error page to be redirected to verification errors (lastiger troubleshooten)
     # nginx.ingress.kubernetes.io/auth-tls-error-page: "http://www.mysite.com/error-cert.html"
     # Specify if certificates are passed to upstream server (voor identificatie van ingelogde user)
-    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+    # nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
 
     # Configuration snippet to add response headers for this specific Ingress.
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Request-Id: $req_id";
-      more_set_headers "Update: 2";
+      more_set_headers "Update: 4";
       more_set_headers "X-Frame-Options: SAMEORIGIN";
       more_set_headers "X-Content-Type-Options: nosniff";
       more_set_headers "X-XSS-Protection: 1; mode=block";
@@ -69,7 +69,7 @@ spec:
   tls:
   - hosts:
     - ssldemo.dev.aahg.ot
-    secretName: dev-ssl
+    secretName: development-ssl
   rules:
   - host: ssldemo.dev.aahg.ot
     http:

@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: forwarder
-  namespace: acceptatie
   annotations:
     # Ingress controller for service external traffic
     kubernetes.io/ingress.class: " "

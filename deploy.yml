@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ssldemo-dep
-  namespace: development
   labels:
     app: ssldemo
 spec:
@@ -20,8 +19,10 @@ spec:
       labels:
         app: ssldemo
         version: "0.1"
+        aadpodidbinding: berichten-deployment
     spec:
-      #serviceAccountName: ssldemo-sa
+      serviceAccountName: ssldemo-sa
+      restartPolicy: Always
       containers:
         - image: k8s.gcr.io/echoserver:1.10
           # - image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
@@ -64,4 +65,19 @@ spec:
           ports:
             - containerPort: 8080
               name: http-main
+          # volumeMounts:
+          #   - name: kv-secrets
+          #     mountPath: /secrets
+          #     readOnly: true
       restartPolicy: Always
+      # volumes:
+      #   - name: kv-secrets
+      #     flexVolume:
+      #       driver: "azure/kv"
+      #       options:
+      #         usepodidentity: "true"
+      #         keyvaultname: "kv-teamb-development"
+      #         keyvaultobjectnames: "ServiceBus--AsbConnectionString;ServiceBus--DataBusConnectionString;BestaatNiet"
+      #         keyvaultobjectaliases: "ServiceBus__AsbConnectionString;ServiceBus__DataBusConnectionString;BestaatNietAlias"
+      #         keyvaultobjecttypes: "secret;secret;secret"
+      #         tenantid: "d8f00f92-64fd-40fe-9f0b-e09e6b0875cc"      
