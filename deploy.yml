@@ -65,12 +65,31 @@ spec:
           ports:
             - containerPort: 8080
               name: http-main
-          # volumeMounts:
-          #   - name: kv-secrets
-          #     mountPath: /secrets
-          #     readOnly: true
-      restartPolicy: Always
+      #     volumeMounts:
+      #       - name: kv-secrets
+      #         mountPath: /secrets
+      #         readOnly: true
       # volumes:
+      #   - name: kv-secrets
+      #     csi:
+      #       driver: secrets-store.csi.k8s.io
+      #       readOnly: true
+      #       volumeAttributes:
+      #         providerName: "azure"
+      #         usePodIdentity: "true"
+      #         keyvaultName: "kv-teamb-development"
+      #         objects:  |
+      #           array:
+      #             - |
+      #               objectName: ServiceBus--AsbConnectionString
+      #               objectType: secret        # object types: secret, key or cert
+      #             - |
+      #               objectName: ServiceBus--DataBusConnectionString
+      #               objectType: secret
+      #               objectVersion: ""
+      #         resourceGroup: ""               # the resource group of the KeyVault
+      #         subscriptionId: ""              # the subscription ID of the KeyVault
+      #         tenantId: "d8f00f92-64fd-40fe-9f0b-e09e6b0875cc"
       #   - name: kv-secrets
       #     flexVolume:
       #       driver: "azure/kv"
